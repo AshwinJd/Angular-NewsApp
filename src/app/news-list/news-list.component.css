@@ -1,0 +1,12 @@
+.card-img-top {
+  width: 600px;
+}
+
+.card {
+  margin-bottom: 20px;
+}
+
+#newsList {
+  border-left: groove 1px;
+  
+}
