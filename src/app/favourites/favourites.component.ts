@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { NewsExtractService } from './news-extract.service';
+
 
 @Component({
   selector: 'app-favourites',
@@ -7,9 +9,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class FavouritesComponent implements OnInit {
 
-  constructor() { }
+  favList: any;
+  
+  constructor(private newsExtract: NewsExtractService) { }
 
   ngOnInit() {
+    this.newsExtract.getFav().subscribe
+    (res => {
+      this.favList = res;
+    })
   }
 
 }

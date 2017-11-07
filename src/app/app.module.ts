@@ -9,6 +9,7 @@ import { NewsListComponent } from './news-list/news-list.component';
 import { NewsDetailComponent } from './news-detail/news-detail.component';
 import { DataShareService } from './data-share.service';
 import { HttpModule } from '@angular/http';
+import { NewsExtractService } from './favourites/news-extract.service';
 
 
 @NgModule({
@@ -25,7 +26,7 @@ import { HttpModule } from '@angular/http';
     HttpClientModule,
     HttpModule
   ],
-  providers: [DataShareService],
+  providers: [DataShareService, NewsExtractService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

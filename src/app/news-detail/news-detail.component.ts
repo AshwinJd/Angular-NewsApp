@@ -7,7 +7,7 @@ import { HttpClient } from '@angular/common/http';
   templateUrl: './news-detail.component.html',
   styleUrls: ['./news-detail.component.css']
 })
-export class NewsDetailComponent implements OnInit, AfterContentInit {
+export class NewsDetailComponent implements OnInit {
 
   specificNews = [];
   data: string;
@@ -19,9 +19,9 @@ export class NewsDetailComponent implements OnInit, AfterContentInit {
     // console.log(this.specificNews);
   }
 
-  ngAfterContentInit() {
-    this.specificNews.push(this.dataSource.getDetailNews(this.data));
-    // console.log(this.specificNews);
-  }
+  // ngAfterContentInit() {
+  //   this.specificNews.push(this.dataSource.getDetailNews(this.data));
+  //   // console.log(this.specificNews);
+  // }
 
 }
