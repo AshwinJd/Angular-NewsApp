@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { DataShareService } from '../data-share.service';
+import { DataShareService } from '../../services/data-share.service';
 import { NewsExtractService } from '../favourites/news-extract.service';
 
 import 'rxjs/add/operator/map';

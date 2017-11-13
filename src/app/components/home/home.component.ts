@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { DataShareService } from '../data-share.service';
+import { DataShareService } from '../../services/data-share.service';
 
 
 @Component({

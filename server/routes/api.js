@@ -2,10 +2,11 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 const News = require('../models/news');
+const config = require('../../config/database');
 
 mongoose.Promise = global.Promise;
 
-mongoose.connect('mongodb://localhost/news')
+mongoose.connect(config.database)
   .then(() =>  console.log('connection successful'))
   .catch((err) => console.error(err));
 

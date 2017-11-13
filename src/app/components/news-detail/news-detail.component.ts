@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, DoCheck, AfterContentInit } from '@angular/core';
-import { DataShareService } from '../data-share.service';
+import { DataShareService } from '../../services/data-share.service';
 import { HttpClient } from '@angular/common/http';
 
 @Component({

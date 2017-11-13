@@ -1,12 +1,14 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { HomeComponent } from './home/home.component';
-import { FavouritesComponent } from './favourites/favourites.component';
+import { HomeComponent } from './components/home/home.component';
+import { FavouritesComponent } from './components/favourites/favourites.component';
+import { LoginComponent } from './components/login/login.component';
+import { RegisterComponent } from './components/register/register.component';
 
 const routes: Routes = [
   {
     path: '',
-    redirectTo: '/home',
+    redirectTo: '/login',
     pathMatch: 'full'
   },
   {
@@ -17,7 +19,9 @@ const routes: Routes = [
 
     path: 'favourites',
     component: FavouritesComponent,
-  }
+  },
+  { path: 'login', component: LoginComponent },
+  { path: 'register', component: RegisterComponent }
 
 ];
 
