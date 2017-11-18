@@ -45,4 +45,13 @@ router.post('/newsAdd', passport.authenticate('jwt', {session:false}), (req,res)
   })
 })
 
+
+router.delete('/news/:id',(req,res,next)=>{
+  News.findByIdAndRemove(req.params.id, (err, news)=>{
+    if(err){
+      res.send(err);
+    }
+    res.json(news);
+  });
+});
 module.exports = router;

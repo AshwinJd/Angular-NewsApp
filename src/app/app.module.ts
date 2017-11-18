@@ -17,6 +17,8 @@ import {ValidateService} from './services/validate.service';
 import {AuthService} from './services/auth.service';
 import { FormsModule } from '@angular/forms';
 import {FlashMessagesModule} from 'angular2-flash-messages';
+import { AuthGuard } from './guards/auth.guard';
+
 
 @NgModule({
   declarations: [
@@ -41,7 +43,8 @@ import {FlashMessagesModule} from 'angular2-flash-messages';
     DataShareService,
     NewsExtractService,
     ValidateService,
-    AuthService
+    AuthService,
+    AuthGuard
   ],
   bootstrap: [AppComponent]
 })

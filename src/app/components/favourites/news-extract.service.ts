@@ -47,4 +47,8 @@ export class NewsExtractService {
 
   } 
   
+  deleteFav(id){
+    return this.http.delete('http://localhost:3000/api/news/'+id)
+      .map(res => res.json());
+  }
 }

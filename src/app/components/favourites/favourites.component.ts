@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NewsExtractService } from './news-extract.service';
+import { newsDetail } from './newsDetail';
 
 
 @Component({
@@ -10,7 +11,7 @@ import { NewsExtractService } from './news-extract.service';
 export class FavouritesComponent implements OnInit {
 
   favList: any;
-  
+  selectedFav: newsDetail;
   constructor(private newsExtract: NewsExtractService) { }
 
   ngOnInit() {
@@ -20,4 +21,15 @@ export class FavouritesComponent implements OnInit {
     })
   }
 
+  deleteFav(id){
+    this.newsExtract.deleteFav(id).subscribe(
+      res => {
+        this.favList.forEach((item,index) => {
+          if(res._id == item._id){
+            this.favList.splice(index,1);
+          }
+        });
+      }
+    )
+  }
 }
