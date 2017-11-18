@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 const News = require('../models/news');
+const passport =  require('passport');
+const jwt = require('jsonwebtoken');
 const config = require('../../config/database');
 
 mongoose.Promise = global.Promise;
@@ -13,7 +15,7 @@ mongoose.connect(config.database)
 
 
 
-router.get('/news', (req,res) =>{
+router.get('/news', passport.authenticate('jwt', {session:false}), (req,res) =>{
   console.log("get request for all favourite news");
   News.find({})
   .exec(function(err,news){
@@ -25,7 +27,7 @@ router.get('/news', (req,res) =>{
   })
 });
 
-router.post('/newsAdd', (req,res) =>{
+router.post('/newsAdd', passport.authenticate('jwt', {session:false}), (req,res) =>{
   console.log("post request for news");
   console.log(req.body);
   var news = new News();

@@ -1,12 +1,14 @@
 import { Injectable } from '@angular/core';
 import {Http, Headers} from '@angular/http';
 import 'rxjs/add/operator/map';
+import {tokenNotExpired} from 'angular2-jwt';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 @Injectable()
 export class AuthService {
   authToken: any;
   user: any;
-
+  private loggedIn = new BehaviorSubject<boolean>(false);
   constructor(private http:Http) { }
 
   registerUser(user){
@@ -29,6 +31,16 @@ export class AuthService {
     this.authToken = token;
     this.user = user;
   }
+  loadToken(){
+    const token = localStorage.getItem('id_token');
+    this.authToken = token;
+  }
+  // loggedIn(){
+  //   if(this.loadToken() != null)
+  //   return true;
+  //   else
+  //   return false;
+  // }
 
   logout(){
     this.authToken = null;
