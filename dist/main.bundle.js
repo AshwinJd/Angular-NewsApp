@@ -274,7 +274,8 @@ var FavouritesComponent = (function () {
     }
     FavouritesComponent.prototype.ngOnInit = function () {
         var _this = this;
-        this.newsExtract.getFav().subscribe(function (res) {
+        this.user = JSON.parse(localStorage.getItem('user_val'));
+        this.newsExtract.getFav(this.user.username).subscribe(function (res) {
             _this.favList = res;
         });
     };
@@ -329,14 +330,13 @@ var NewsExtractService = (function () {
     function NewsExtractService(http) {
         this.http = http;
     }
-    NewsExtractService.prototype.getFav = function () {
+    NewsExtractService.prototype.getFav = function (user) {
         var headers = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["Headers"]();
         this.loadToken();
         headers.append('Authorization', this.authToken);
         return this.http
-            .get('http://localhost:3000/api/news', { headers: headers })
+            .get('http://localhost:3000/api/news/' + user, { headers: headers })
             .map(function (response) {
-            // console.log("asda"+response);
             return response.json();
         });
     };
@@ -344,16 +344,13 @@ var NewsExtractService = (function () {
         var token = localStorage.getItem('id_token');
         this.authToken = token;
     };
-    NewsExtractService.prototype.postFav = function (news) {
+    NewsExtractService.prototype.postFav = function (news, user) {
         var _this = this;
-        console.log("service", news);
+        news["user"] = user;
         var headers = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["Headers"]();
         this.loadToken();
         headers.append('Authorization', this.authToken);
         headers.append('Content-Type', 'application/json');
-        // let options = new RequestOptions({ headers: headers });
-        // return this.http.post('http://localhost:3000/api/newsadd', JSON.stringify(news), {headers: headers})
-        //   .map(res => res.json);
         return new Promise(function (resolve, reject) {
             _this.http.post('http://localhost:3000/api/newsadd', news, { headers: headers })
                 .map(function (res) { return res.json(); })
@@ -581,7 +578,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/components/navbar/navbar.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<nav class=\"navbar navbar-inverse\">\n  <div class=\"container\">\n    <div class=\"navbar-header\">\n      <button type=\"button\" class=\"navbar-toggle collapsed\" data-toggle=\"collapse\" data-target=\"#navbar\" aria-expanded=\"false\" aria-controls=\"navbar\">\n        <span class=\"sr-only\">Toggle navigation</span>\n        <span class=\"icon-bar\"></span>\n        <span class=\"icon-bar\"></span>\n        <span class=\"icon-bar\"></span>\n      </button>\n      <a class=\"navbar-brand\" href=\"#\">NEWS Shots</a>\n    </div>\n    <div id=\"navbar\" class=\"collapse navbar-collapse\">\n      <ul class=\"nav navbar-nav navbar-left\">\n        <li [routerLinkActive]=\"['active']\" [routerLinkActiveOptions]=\"{exact:true}\"><a [routerLink]=\"['/home']\">Home</a></li>\n        <li *ngIf=\"authService.loggedIn()\" [routerLinkActive]=\"['active']\" [routerLinkActiveOptions]=\"{exact:true}\"><a [routerLink]=\"['/favourites']\">Favourites</a></li>\n      </ul>\n      <ul class=\"nav navbar-nav navbar-right\">\n        <li *ngIf=\"!authService.loggedIn()\" [routerLinkActive]=\"['active']\" [routerLinkActiveOptions]=\"{exact:true}\"><a [routerLink]=\"['/login']\">Login</a></li>\n        <li *ngIf=\"!authService.loggedIn()\"  [routerLinkActive]=\"['active']\" [routerLinkActiveOptions]=\"{exact:true}\"><a [routerLink]=\"['/register']\">Register</a></li>\n        <li *ngIf=\"authService.loggedIn()\"><a (click)=\"onLogoutClick()\" href=\"#\">Logout</a></li>\n      </ul>\n    </div><!--/.nav-collapse -->\n  </div>\n</nav>"
+module.exports = "<nav class=\"navbar navbar-inverse\">\n  <div class=\"container\">\n    <div class=\"navbar-header\">\n      <button type=\"button\" class=\"navbar-toggle collapsed\" data-toggle=\"collapse\" data-target=\"#navbar\" aria-expanded=\"false\" aria-controls=\"navbar\">\n        <span class=\"sr-only\">Toggle navigation</span>\n        <span class=\"icon-bar\"></span>\n        <span class=\"icon-bar\"></span>\n        <span class=\"icon-bar\"></span>\n      </button>\n      <a class=\"navbar-brand\" href=\"#\">NEWS Shots</a>\n    </div>\n    <div id=\"navbar\" class=\"collapse navbar-collapse\">\n      <ul class=\"nav navbar-nav navbar-left\">\n        <li [routerLinkActive]=\"['active']\" [routerLinkActiveOptions]=\"{exact:true}\"><a [routerLink]=\"['/home']\">Home</a></li>\n        <li *ngIf=\"authService.loggedIn()\" [routerLinkActive]=\"['active']\" [routerLinkActiveOptions]=\"{exact:true}\"><a [routerLink]=\"['/favourites']\">Favourites</a></li>\n      </ul>\n      <ul class=\"nav navbar-nav navbar-right\">\n        <li *ngIf=\"!authService.loggedIn()\" [routerLinkActive]=\"['active']\" [routerLinkActiveOptions]=\"{exact:true}\"><a [routerLink]=\"['/login']\">Login</a></li>\n        <li *ngIf=\"!authService.loggedIn()\"  [routerLinkActive]=\"['active']\" [routerLinkActiveOptions]=\"{exact:true}\"><a [routerLink]=\"['/register']\">Register</a></li>\n        <li *ngIf=\"authService.loggedIn()\"><a href=\"#\">{{this.user.username}}</a></li>\n        <li *ngIf=\"authService.loggedIn()\"><a (click)=\"onLogoutClick()\" href=\"#\">Logout</a></li>\n      </ul>\n    </div><!--/.nav-collapse -->\n  </div>\n</nav>"
 
 /***/ }),
 
@@ -615,6 +612,7 @@ var NavbarComponent = (function () {
         this.flashMessage = flashMessage;
     }
     NavbarComponent.prototype.ngOnInit = function () {
+        this.user = JSON.parse(localStorage.getItem("user_val"));
     };
     NavbarComponent.prototype.onLogoutClick = function () {
         this.authService.logout();
@@ -622,6 +620,7 @@ var NavbarComponent = (function () {
             cssClass: 'alert-success',
             timeout: 3000
         });
+        this.user = null;
         this.router.navigate(['/login']);
         return false;
     };
@@ -779,21 +778,8 @@ var NewsListComponent = (function () {
         // this.dataSource.changeData(this.selectedNews);
     };
     NewsListComponent.prototype.addFav = function (detail) {
-        var _this = this;
-        // d.description;
-        // console.log("detail", detail.descriptions, typeof(detail.description));
-        this.specificNews.map(function (item) {
-            // console.log("desc",item.description,typeof(item.description));
-            if (item.description == detail.description) {
-                _this.fav = item;
-                _this.newsExtract.postFav(_this.fav);
-                console.log(_this.fav);
-                return;
-            }
-            else {
-                console.log("couldnt add to fav");
-            }
-        });
+        this.userDetail = JSON.parse(localStorage.getItem('user_val'));
+        this.newsExtract.postFav(detail, this.userDetail.username);
     };
     NewsListComponent.prototype.ngOnInit = function () {
         var _this = this;

@@ -26,12 +26,24 @@ router.get('/news', passport.authenticate('jwt', {session:false}), (req,res) =>{
     }
   })
 });
+router.get('/news/:name', passport.authenticate('jwt', {session:false}), (req,res) =>{
+  console.log("get request for all favourite news");
+  News.find({user: req.params.name})
+  .exec(function(err,news){
+    if(err){
+      console.log("Error getting news");
+    }else {
+      res.json(news);
+    }
+  })
+});
 
 router.post('/newsAdd', passport.authenticate('jwt', {session:false}), (req,res) =>{
   console.log("post request for news");
   console.log(req.body);
   var news = new News();
   news.id = req.body.author;
+  news.user = req.body.user;
   news.title = req.body.title;
   news.description = req.body.description;
   news.image = req.body.urlToImage;

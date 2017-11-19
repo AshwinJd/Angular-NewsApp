@@ -12,10 +12,13 @@ export class FavouritesComponent implements OnInit {
 
   favList: any;
   selectedFav: newsDetail;
+  user: any;
   constructor(private newsExtract: NewsExtractService) { }
 
   ngOnInit() {
-    this.newsExtract.getFav().subscribe
+    this.user = JSON.parse(localStorage.getItem('user_val'));
+    
+    this.newsExtract.getFav(this.user.username).subscribe
     (res => {
       this.favList = res;
     })
